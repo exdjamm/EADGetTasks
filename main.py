@@ -13,7 +13,6 @@ if __name__ == '__main__':
 		SITE.setCoursesTasks()
 		courses = SITE.getCourses()
 
-		SITE.saveTaskJSON()
 
 		API = TaskAPI()
 		for course in courses:
