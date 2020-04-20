@@ -73,7 +73,7 @@ class ScrapEAD(Session):
 					task_type = title.split(' ')[-1]
 					title = course + " - "+ task_type + " - " + title.replace(task_type, '')
 
-					if "Avisos" not in title and title not in self.__tasks[course]:
+					if "Avisos" not in title and title not in self.__tasks[course]['tasks']:
 						
 						notes = span.parent.get('href')
 						if notes is None:
@@ -101,7 +101,7 @@ class ScrapEAD(Session):
 			doc.write(dumps(self.__tasks))
 
 if __name__ == '__main__':
-	main =  ScrapEAD("08442950192", "2003cidades")
+	main =  ScrapEAD()
 	main.setToken()
 	main.login()
 	main.setSessionKey()
