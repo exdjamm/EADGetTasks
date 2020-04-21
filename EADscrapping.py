@@ -94,14 +94,16 @@ class ScrapEAD(Session):
 
 	def getCourses(self):
 		self.saveTaskJSON()
-		return self.__courses
+		return self.__tasks
 
 	def saveTaskJSON(self):
 		with open("tasks.json", 'w') as doc:
 			doc.write(dumps(self.__tasks))
 
 if __name__ == '__main__':
-	main =  ScrapEAD()
+	login = input("Digite o seu login >>> ")
+	senha = input("Digite a sua senha >>> ")
+	main =  ScrapEAD(login, senha)
 	main.setToken()
 	main.login()
 	main.setSessionKey()
@@ -110,6 +112,6 @@ if __name__ == '__main__':
 	main.saveTaskJSON()
 	courses = main.getCourses()
 	for course in courses:
-		for task in courses[course]:
-			print(task)
+		for task in courses[course]['tasks']:
+			print(str(task))
 	#print(res.status_code)
