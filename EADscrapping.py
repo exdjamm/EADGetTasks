@@ -94,7 +94,7 @@ class ScrapEAD(Session):
 
 	def getCourses(self):
 		self.saveTaskJSON()
-		return self.__tasks
+		return self.__courses
 
 	def saveTaskJSON(self):
 		with open("tasks.json", 'w') as doc:
