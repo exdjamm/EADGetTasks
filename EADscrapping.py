@@ -37,13 +37,13 @@ class ScrapEAD(Session):
 			self.__exists = False
 
 	def setSessionKey(self):
-		self.__session_key = getDataByDict(self.__html_doc, tag='a', filter={'data-title':'logout,moodle'}, value='href').split('=')[1]
+		self.__session_key = getDataByDict(self.__html_doc, tag='a', filter={'data-title':'logout,moodle'}, data='href').split('=')[1]
 		#BeautifulSoup(self.__html_doc, self.__type).find("a", {'data-title':'logout,moodle'})["href"].split("=")[1]
 		pass
 
 	def setToken(self):
 		self.__html_doc = self.get(self.__url, verify=self.__ssl_cert).text
-		self.__login_token = getDataByDict(self.__html_doc, tag='input', filter={'name':'logintoken'}, value='value')
+		self.__login_token = getDataByDict(self.__html_doc, tag='input', filter={'name':'logintoken'}, data='value')
 		#self.__login_token = BeautifulSoup(self.__html_doc, self.__type).find('input', {'name':'logintoken'}).get("value")
 		pass
 
