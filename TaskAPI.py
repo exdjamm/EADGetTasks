@@ -18,7 +18,7 @@ class TaskAPI:
 
 		self.tasklists = self._service.tasklists()
 		self.tasks = self._service.tasks()
-		setTasklistsItems()
+		self.setTasklistsItems()
 		pass
 
 	def __getToken(self):
@@ -76,7 +76,7 @@ class TaskAPI:
 		return tasklistID
 
 	def setTasklistsItems(self):
-		self.__itemsTasklists = self.tasklists.list.execute()['items']
+		self.__itemsTasklists = self.tasklists.list().execute()['items']
 		pass
 
 	def listTask(self, tasklist="@default"):

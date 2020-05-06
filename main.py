@@ -18,7 +18,7 @@ if __name__ == '__main__':
 		nameTasklists = API.getNameTasksLists()
 		
 		for course in courses:
-			if couse not in nameTasklists:
+			if course not in nameTasklists:
 				courseID = API.createNewTaskList({'title': course})['id']
 				
 			else:

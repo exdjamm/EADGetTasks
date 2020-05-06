@@ -20,11 +20,13 @@ def getDataByDict(html, **filterDict):
 	# print(tagFilter)
 	# print(tag)
 	# print(filterDict['tagName'])
-
-	if filterDict['data'] == 'text':
-		tagValue = tag.text
+	if filterDict.get('data') == None:
+		return tag
 	else:
-		tagValue = tag.get(filterDict['data'])
+		if filterDict['data'] == 'text':
+			tagValue = tag.text
+		else:
+			tagValue = tag.get(filterDict['data'])
 
 	return tagValue
 
