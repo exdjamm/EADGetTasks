@@ -15,11 +15,20 @@ if __name__ == '__main__':
 
 
 		API = TaskAPI()
+		nameTasklists = API.getNameTasksLists()
+		
 		for course in courses:
+			if couse not in nameTasklists:
+				courseID = API.createNewTaskList({'title': course})['id']
+				
+			else:
+				courseID = API.getTasklistIDByName(course)
+
 			for task in courses[course]['tasks']:
-				tasklist_id = courses[course]['id'] if courses[course]['id'] != '' else '@default'
+				#tasklist_id = courses[course]['id'] if courses[course]['id'] != '' else '@default'
 				if task != []:
-					API.insertNewTask(body=task, tasklist=tasklist_id)
+					API.insertNewTask(body=task, tasklist=courseID)
+
 	except Exception as e:
 		raise e
 		#remove("tasks.json")

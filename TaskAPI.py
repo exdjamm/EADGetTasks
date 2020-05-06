@@ -18,6 +18,7 @@ class TaskAPI:
 
 		self.tasklists = self._service.tasklists()
 		self.tasks = self._service.tasks()
+		setTasklistsItems()
 		pass
 
 	def __getToken(self):
@@ -57,6 +58,27 @@ class TaskAPI:
 
 		pass
 
+	def createNewTaskList(self, cmd):
+		return self.tasklists.insert(body=cmd).execute()
+
+	def getNameTasksLists(self):
+		tasklistName = []
+		for tasklist in self.tasklists.list().execute()['items']:
+			tasklistName.append(tasklist['title'])
+		return tasklistName
+
+	def getTasklistIDByName(self, name):
+		for tasklist in self.__itemsTasklists:
+			if tasklist['title'] == name:
+				tasklistID = tasklist['id']
+				break
+
+		return tasklistID
+
+	def setTasklistsItems(self):
+		self.__itemsTasklists = self.tasklists.list.execute()['items']
+		pass
+
 	def listTask(self, tasklist="@default"):
 		try:
 			return self.tasks.list(tasklist=tasklist).execute()["items"], True
@@ -69,4 +91,5 @@ class TaskAPI:
 
 if __name__ == '__main__':
 	API = TaskAPI()
-	items, teste= API.listTask()
+	items= API.listTasksList()
+	print(items)

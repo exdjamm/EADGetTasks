@@ -55,7 +55,7 @@ class ScrapEAD(Session):
 		for a in tags_a:
 			course_name = a.span.string 
 
-			if "2020" in course_name or "ingles" in course_name:
+			if "2020" in course_name:
 				course_name = course_name.split('-')[-1].strip()
 				self.__courses[course_name] = {"link":a['href'], 'tasks':[]}
 		pass
@@ -67,7 +67,7 @@ class ScrapEAD(Session):
 			self.__html_doc = BeautifulSoup(self.__html_doc, self.__type)
 
 			if course not in self.__tasks:
-				self.__tasks[course] = {'id':'', 'tasks':[]}
+				self.__tasks[course] = {'tasks':[]}
 
 			if not self.__html_doc.find('ul', {'id':"multi_section_tiles"}):
 
@@ -83,7 +83,7 @@ class ScrapEAD(Session):
 						notes = span.parent.get('href')
 						if notes is None:
 							continue
-						self.__courses[course]['id'] = self.__tasks[course]['id']
+						#self.__courses[course]['id'] = self.__tasks[course]['id']
 						self.__courses[course]['tasks'].append({"title":title, "notes":notes})
 						self.__tasks[course]['tasks'].append(title)
 			else: 
