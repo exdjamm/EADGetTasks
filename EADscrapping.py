@@ -1,7 +1,9 @@
 from requests import Session
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 import os.path
 from json import dumps, loads
+from filterPages import getDataByDict
+
 class ScrapEAD(Session):
 	"""docstring for ScrapEAD"""
 	def __init__(self, username, password):
@@ -35,22 +37,25 @@ class ScrapEAD(Session):
 			self.__exists = False
 
 	def setSessionKey(self):
-		self.__session_key = BeautifulSoup(self.__html_doc, self.__type).find("a", {'data-title':'logout,moodle'})["href"].split("=")[1]
+		self.__session_key = getDataByDict(self.__html_doc, tag='a', filter={'data-title':'logout,moodle'}, value='href').split('=')[1]
+		#BeautifulSoup(self.__html_doc, self.__type).find("a", {'data-title':'logout,moodle'})["href"].split("=")[1]
 		pass
 
 	def setToken(self):
 		self.__html_doc = self.get(self.__url, verify=self.__ssl_cert).text
-		self.__login_token = BeautifulSoup(self.__html_doc, self.__type).find('input', {'name':'logintoken'}).get("value")
+		self.__login_token = getDataByDict(self.__html_doc, tag='input', filter={'name':'logintoken'}, value='value')
+		#self.__login_token = BeautifulSoup(self.__html_doc, self.__type).find('input', {'name':'logintoken'}).get("value")
 		pass
 
 	def setCourses(self):
 		self._payload = {"sesskey":self.__session_key}
 		self.__html_doc =self.get(self.__url+"blocks/custom_course_menu/interface.php", params=self._payload, verify=self.__ssl_cert).text
-		tags_a = BeautifulSoup(self.__html_doc, self.__type).find_all('a', {"class":"courselist_course scrollable"})
+		tags_a = getDataByDict(self.__html_doc, tag='a', filter={"class":"courselist_course scrollable"}, method='all')
+		#tags_a = BeautifulSoup(self.__html_doc, self.__type).find_all('a', {"class":"courselist_course scrollable"})
 		for a in tags_a:
 			course_name = a.span.string 
 
-			if "2020" in course_name:
+			if "2020" in course_name or "ingles" in course_name:
 				course_name = course_name.split('-')[-1].strip()
 				self.__courses[course_name] = {"link":a['href'], 'tasks':[]}
 		pass
@@ -71,7 +76,7 @@ class ScrapEAD(Session):
 				for span in span_tags:
 					title = span.text
 					task_type = title.split(' ')[-1]
-					title = course + " - "+ task_type + " - " + title.replace(task_type, '')
+					title =  task_type + " - " + title.replace(task_type, '')#course + " - "+
 
 					if "Avisos" not in title and title not in self.__tasks[course]['tasks']:
 						
