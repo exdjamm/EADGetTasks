@@ -1,11 +1,24 @@
 from TaskAPI import *
 from EADscrapping import *
+import os.path
 from os import remove
+
 if __name__ == '__main__':
-	login = input("Digite o seu login >>> ")
-	senha = input("Digite a sua senha >>> ")
+
+	if os.path.exists("login.json"):
+		with open("login.json", 'r') as login:
+			json = loads(login.read())
+			user = json['user']
+			senha = json['senha']
+	else:
+		user = input("Digite o seu login >>> ")
+		senha = input("Digite a sua senha >>> ")
+		with open("login.json", "w") as login:
+			json = {"user":user, 'senha':senha}
+			login.write(dumps(json))
+	
 	try:
-		SITE = ScrapEAD(login, senha)
+		SITE = ScrapEAD(user, senha)
 		SITE.setToken()
 		SITE.login()
 		SITE.setSessionKey()
@@ -31,6 +44,6 @@ if __name__ == '__main__':
 
 	except Exception as e:
 		raise e
-		#remove("tasks.json")
+		remove("tasks.json")
 		
 	
