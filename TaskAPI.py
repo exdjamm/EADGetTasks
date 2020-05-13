@@ -33,6 +33,7 @@ class TaskAPI:
 		pass
 
 	def __testCreds(self, SCOPES):
+		print("[TASK]\t\t>> connecting to google...")
 		# If there are no (valid) credentials available, let the user log in.
 		if not self._creds or not self._creds.valid:
 			if self._creds and self._creds.expired and self._creds.refresh_token:
@@ -55,28 +56,36 @@ class TaskAPI:
 
 	def __createService(self):
 		self._service = build('tasks', 'v1', credentials=self._creds)
-
+		print("[TASK]\t\t>> Done.")
 		pass
 
 	def createNewTaskList(self, cmd):
-		return self.tasklists.insert(body=cmd).execute()
+		print("[TASK]\t\t>> creating new tasklist")
+		tasklist = self.tasklists.insert(body=cmd).execute()
+		print("[TASK]\t\t>> Done.")
+		return tasklist
 
 	def getNameTasksLists(self):
+		print("[TASK]\t\t>> get tasklists names...")
 		tasklistName = []
 		for tasklist in self.tasklists.list().execute()['items']:
 			tasklistName.append(tasklist['title'])
+		print("[TASK]\t\t>> Done.")
 		return tasklistName
 
 	def getTasklistIDByName(self, name):
+		print("[TASK]\t\t>> get tasklist by name ...")
 		for tasklist in self.__itemsTasklists:
 			if tasklist['title'] == name:
 				tasklistID = tasklist['id']
 				break
-
+		print("[TASK]\t\t>> Done.")
 		return tasklistID
 
 	def setTasklistsItems(self):
+		print("[TASK]\t\t>> get items tasklist...")
 		self.__itemsTasklists = self.tasklists.list().execute()['items']
+		print("[TASK]\t\t>> Done.")
 		pass
 
 	def listTask(self, tasklist="@default"):
@@ -86,8 +95,11 @@ class TaskAPI:
 			return self.tasks.list(tasklist=tasklist).execute(), False
 		
 	def insertNewTask(self, tasklist="@default", body=None):
+		print("[TASK]\t\t>> adding new task...")
 		if body != None:
-			return self.tasks.insert(tasklist=tasklist, body=body).execute()
+			task = self.tasks.insert(tasklist=tasklist, body=body).execute() 
+			print("[TASK]\t\t>> Done.")
+			return task
 
 if __name__ == '__main__':
 	API = TaskAPI()

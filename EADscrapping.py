@@ -37,17 +37,22 @@ class ScrapEAD(Session):
 			self.__exists = False
 
 	def setSessionKey(self):
+		print("[SCRAP]\t\t>> get SessionKey...")
 		self.__session_key = getDataByDict(self.__html_doc, tag='a', filter={'data-title':'logout,moodle'}, data='href').split('=')[1]
 		#BeautifulSoup(self.__html_doc, self.__type).find("a", {'data-title':'logout,moodle'})["href"].split("=")[1]
+		print("[SCRAP]\t\t>> Done")
 		pass
 
 	def setToken(self):
+		print("[SCRAP]\t\t>> get Token...")
 		self.__html_doc = self.get(self.__url, verify=self.__ssl_cert).text
 		self.__login_token = getDataByDict(self.__html_doc, tag='input', filter={'name':'logintoken'}, data='value')
 		#self.__login_token = BeautifulSoup(self.__html_doc, self.__type).find('input', {'name':'logintoken'}).get("value")
+		print("[SCRAP]\t\t>> Done")
 		pass
 
 	def setCourses(self):
+		print("[SCRAP]\t\t>> filter courses...")
 		self._payload = {"sesskey":self.__session_key}
 		self.__html_doc =self.get(self.__url+"blocks/custom_course_menu/interface.php", params=self._payload, verify=self.__ssl_cert).text
 		tags_a = getDataByDict(self.__html_doc, tag='a', filter={"class":"courselist_course scrollable"}, method='all')
@@ -58,9 +63,11 @@ class ScrapEAD(Session):
 			if "2020" in course_name:
 				course_name = course_name.split('-')[-1].strip()
 				self.__courses[course_name] = {"link":a['href'], 'tasks':[]}
+		print("[SCRAP]\t\t>> Done.")
 		pass
 
 	def setCoursesTasks(self):
+		print("[SCRAP]\t\t>> make sintax of Task...")
 		for course in self.__courses:
 			url = self.__courses[course]['link']
 			self.__html_doc = self.get(url).text
@@ -89,21 +96,28 @@ class ScrapEAD(Session):
 			else: 
 				pass
 		
-
+		print("[SCRAP]\t\t>> Done")
 		pass
 
 	def login(self):
+		print("[SCRAP]\t\t>> login...")
 		self._payload = {"username":self.__username, "password":self.__password, "logintoken":self.__login_token}
 		self.__html_doc = self.post(self.__url+'login/index.php', data=self._payload, verify=self.__ssl_cert).text
+		print("[SCRAP]\t\t>> Done")
 		pass
 
 	def getCourses(self):
+		print("[SCRAP]\t\t>> returning courses...")
 		self.saveTaskJSON()
+		print("[SCRAP]\t\t>> Done")
 		return self.__courses
 
 	def saveTaskJSON(self):
+		print("[SCRAP]\t\t>> Saving task.json...")
 		with open("tasks.json", 'w') as doc:
 			doc.write(dumps(self.__tasks))
+		print("[SCRAP]\t\t>> Done")
+		pass
 
 if __name__ == '__main__':
 	login = input("Digite o seu login >>> ")
