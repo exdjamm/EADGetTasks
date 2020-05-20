@@ -1,4 +1,4 @@
-from TaskAPI import *
+#from TaskAPI import *
 from EADscrapping import *
 import os.path
 from os import remove
@@ -28,20 +28,20 @@ if __name__ == '__main__':
 		courses = SITE.getCourses()
 
 
-		API = TaskAPI()
-		nameTasklists = API.getNameTasksLists()
+		#API = TaskAPI()
+		#nameTasklists = API.getNameTasksLists()
 		print("[EADAPP]\t>> add tasks to google task.")
-		for course in courses:
-			if course not in nameTasklists:
-				courseID = API.createNewTaskList({'title': course})['id']
+		# for course in courses:
+		# 	if course not in nameTasklists:
+		# 		#courseID = API.createNewTaskList({'title': course})['id']
 				
-			else:
-				courseID = API.getTasklistIDByName(course)
+		# 	else:
+		# 		#courseID = API.getTasklistIDByName(course)
 
-			for task in courses[course]['tasks']:
-				#tasklist_id = courses[course]['id'] if courses[course]['id'] != '' else '@default'
-				if task != []:
-					API.insertNewTask(body=task, tasklist=courseID)
+		# 	for task in courses[course]['tasks']:
+		# 		#tasklist_id = courses[course]['id'] if courses[course]['id'] != '' else '@default'
+		# 		if task != []:
+		# 			#API.insertNewTask(body=task, tasklist=courseID)
 		print("[EADAPP]\t>> Exiting.")
 	except Exception as e:
 		raise e
