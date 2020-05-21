@@ -6,9 +6,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 
-class TaskAPI:
+class SheetsAPI:
 	"""docstring for TaskAPI"""
-	def __init__(self, SCOPES=['https://www.googleapis.com/auth/tasks']):
+	def __init__(self, SCOPES=['https://www.googleapis.com/auth/spreadsheets']):
 		self._creds = None
 		self._service = None
 
@@ -16,9 +16,12 @@ class TaskAPI:
 		self.__testCreds(SCOPES)
 		self.__createService()
 
-		self.tasklists = self._service.tasklists()
-		self.tasks = self._service.tasks()
-		self.setTasklistsItems()
+		self.__idSheet = '1vNwO9QB0RhjbntqBwPKkS_ns5-O7SdzvdhbC7RaEaYs'
+		self.__range = "A2:D"
+
+		self.addrow = self._service.values()
+		#self.tasks = self._service.tasks()
+		#self.setTasklistsItems()
 		pass
 
 	def __getToken(self):
@@ -33,7 +36,7 @@ class TaskAPI:
 		pass
 
 	def __testCreds(self, SCOPES):
-		print("[TASK]\t\t>> connecting to google...")
+		print("[SHEETS]\t\t>> connecting to google...")
 		# If there are no (valid) credentials available, let the user log in.
 		if not self._creds or not self._creds.valid:
 			if self._creds and self._creds.expired and self._creds.refresh_token:
@@ -55,53 +58,25 @@ class TaskAPI:
 		self.__setCreds(flow.run_local_server(port=0))
 
 	def __createService(self):
-		self._service = build('tasks', 'v1', credentials=self._creds)
-		print("[TASK]\t\t>> Done.")
+		self._service = build('sheets', 'v4', credentials=self._creds)
+		self._service = self._service.spreadsheets()
+		print("[SHEETS]\t\t>> Done.")
 		pass
 
-	def createNewTaskList(self, cmd):
-		print("[TASK]\t\t>> creating new tasklist")
-		tasklist = self.tasklists.insert(body=cmd).execute()
-		print("[TASK]\t\t>> Done.")
-		return tasklist
 
-	def getNameTasksLists(self):
-		print("[TASK]\t\t>> get tasklists names...")
-		tasklistName = []
-		for tasklist in self.tasklists.list().execute()['items']:
-			tasklistName.append(tasklist['title'])
-		print("[TASK]\t\t>> Done.")
-		return tasklistName
-
-	def getTasklistIDByName(self, name):
-		print("[TASK]\t\t>> get tasklist by name ...")
-		for tasklist in self.__itemsTasklists:
-			if tasklist['title'] == name:
-				tasklistID = tasklist['id']
-				break
-		print("[TASK]\t\t>> Done.")
-		return tasklistID
-
-	def setTasklistsItems(self):
-		print("[TASK]\t\t>> get items tasklist...")
-		self.__itemsTasklists = self.tasklists.list().execute()['items']
-		print("[TASK]\t\t>> Done.")
-		pass
-
-	def listTask(self, tasklist="@default"):
-		try:
-			return self.tasks.list(tasklist=tasklist).execute()["items"], True
-		except Exception as e:
-			return self.tasks.list(tasklist=tasklist).execute(), False
-		
-	def insertNewTask(self, tasklist="@default", body=None):
-		print("[TASK]\t\t>> adding new task...")
+	def insertNewRow(self, list=[]):
+		body = {
+			"majorDimension": "COLUMNS",
+        	"values": list
+		}
+		print("[SHEETS]\t\t>> adding new task...")
 		if body != None:
-			task = self.tasks.insert(tasklist=tasklist, body=body).execute() 
-			print("[TASK]\t\t>> Done.")
+			task = self.addrow.append(spreadsheetId=self.__idSheet,
+                                range=self.__range,
+                                body=body, valueInputOption="USER_ENTERED").execute()
+			print("[SHEETS]\t\t>> Done.")
 			return task
 
 if __name__ == '__main__':
-	API = TaskAPI()
-	items= API.listTasksList()
-	print(items)
+	API = SheetsAPI()
+	

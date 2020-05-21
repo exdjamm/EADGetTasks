@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import os.path
 from json import dumps, loads
 from filterPages import getDataByDict
+from time import sleep
+from datetime import datetime as time
 
 class ScrapEAD(Session):
 	"""docstring for ScrapEAD"""
@@ -45,6 +47,7 @@ class ScrapEAD(Session):
 
 	def setToken(self):
 		print("[SCRAP]\t\t>> get Token...")
+		sleep(0.01)
 		self.__html_doc = self.get(self.__url, verify=self.__ssl_cert).text
 		self.__login_token = getDataByDict(self.__html_doc, tag='input', filter={'name':'logintoken'}, data='value')
 		#self.__login_token = BeautifulSoup(self.__html_doc, self.__type).find('input', {'name':'logintoken'}).get("value")
@@ -54,47 +57,43 @@ class ScrapEAD(Session):
 	def setCourses(self):
 		print("[SCRAP]\t\t>> filter courses...")
 		self._payload = {"sesskey":self.__session_key}
+		sleep(0.01)
 		self.__html_doc =self.get(self.__url+"blocks/custom_course_menu/interface.php", params=self._payload, verify=self.__ssl_cert).text
 		tags_a = getDataByDict(self.__html_doc, tag='a', filter={"class":"courselist_course scrollable"}, method='all')
 		#tags_a = BeautifulSoup(self.__html_doc, self.__type).find_all('a', {"class":"courselist_course scrollable"})
 		for a in tags_a:
 			course_name = a.span.string 
 
-			if "2020" in course_name:
+			if ("2020" in course_name) or ("INGLÊS 3" in course_name):
 				course_name = course_name.split('-')[-1].strip()
-				self.__courses[course_name] = {"link":a['href'], 'tasks':[]}
+				self.__courses[course_name] = {"link":a['href'],'tasks':[]}
 		print("[SCRAP]\t\t>> Done.")
 		pass
 
 	def setCoursesTasks(self):
-		print("[SCRAP]\t\t>> make sintax of Task...")
+		print("[SCRAP]\t\t>> make sintax of Sheets...")
 		for course in self.__courses:
 			url = self.__courses[course]['link']
+			sleep(0.01)
 			self.__html_doc = self.get(url).text
 			self.__html_doc = BeautifulSoup(self.__html_doc, self.__type)
 
 			if course not in self.__tasks:
 				self.__tasks[course] = {'tasks':[]}
 
-			if not self.__html_doc.find('ul', {'id':"multi_section_tiles"}):
+			span_tags = self.__html_doc.find_all("span", {"class":"instancename"})
 
-				span_tags = self.__html_doc.find_all("span", {"class":"instancename"})
+			for span in span_tags:
+				title = span.text
 
-				for span in span_tags:
-					title = span.text
-					task_type = title.split(' ')[-1]
-					title =  task_type + " - " + title.replace(task_type, '')#course + " - "+
-
-					if "Avisos" not in title and title not in self.__tasks[course]['tasks']:
-						
-						notes = span.parent.get('href')
-						if notes is None:
-							continue
-						#self.__courses[course]['id'] = self.__tasks[course]['id']
-						self.__courses[course]['tasks'].append({"title":title, "notes":notes})
-						self.__tasks[course]['tasks'].append(title)
+				if (("Quest" in title) or ("Tare" in title) or ("Ativ" in title)) and title not in self.__tasks[course]['tasks']:
+					tempo = str(time.now()).replace('-','/').split('.')[0]
+					tarefaUrl = span.parent.get('href')
+					print(tarefaUrl)
+					self.__courses[course]['tasks'].append([[course], [title], [self.getDataEntrega(tarefaUrl)], [tempo]])
+					self.__tasks[course]['tasks'].append(title)
 			else: 
-				pass
+				continue
 		
 		print("[SCRAP]\t\t>> Done")
 		pass
@@ -102,9 +101,34 @@ class ScrapEAD(Session):
 	def login(self):
 		print("[SCRAP]\t\t>> login...")
 		self._payload = {"username":self.__username, "password":self.__password, "logintoken":self.__login_token}
+		sleep(0.01)
 		self.__html_doc = self.post(self.__url+'login/index.php', data=self._payload, verify=self.__ssl_cert).text
 		print("[SCRAP]\t\t>> Done")
 		pass
+
+	def getDataEntrega(self, url):
+		if url != None:
+			sleep(0.01)
+			text = self.get(url).text
+			data = getDataByDict(text, tag='div', filter={'class':'box quizinfo'})
+			if "NoneType" in str(type(data)):
+				data = getDataByDict(text, tag="td", filter={'class':"cell c1 lastcol"})
+				if "NoneType" in str(type(data)):
+					return ""
+				else:
+					if ',' in data.string:
+						return data.string.split(',')[-2].strip().replace(' ', '/')
+					else:
+						return ""
+			elif len(data.find_all('p') ) <= 1:
+				return ""
+			else:
+				if ',' in data.find_all('p')[-2].string:
+					return data.find_all('p')[-2].string.split(',')[1].strip().replace(' ', '/')
+				else:
+					return ''
+		else:
+			return ""
 
 	def getCourses(self):
 		print("[SCRAP]\t\t>> returning courses...")

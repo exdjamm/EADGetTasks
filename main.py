@@ -1,4 +1,4 @@
-#from TaskAPI import *
+from SheetsAPI import *
 from EADscrapping import *
 import os.path
 from os import remove
@@ -12,8 +12,8 @@ if __name__ == '__main__':
 			user = json['user']
 			senha = json['senha']
 	else:
-		user = input("Digite o seu login >\t>> ")
-		senha = input("Digite a sua senha >\t>> ")
+		user = input("Digite o seu login >>> ")
+		senha = input("Digite a sua senha >>> ")
 		with open("login.json", "w") as login:
 			json = {"user":user, 'senha':senha}
 			login.write(dumps(json))
@@ -28,20 +28,13 @@ if __name__ == '__main__':
 		courses = SITE.getCourses()
 
 
-		#API = TaskAPI()
+		API = SheetsAPI()
 		#nameTasklists = API.getNameTasksLists()
 		print("[EADAPP]\t>> add tasks to google task.")
-		# for course in courses:
-		# 	if course not in nameTasklists:
-		# 		#courseID = API.createNewTaskList({'title': course})['id']
-				
-		# 	else:
-		# 		#courseID = API.getTasklistIDByName(course)
-
-		# 	for task in courses[course]['tasks']:
-		# 		#tasklist_id = courses[course]['id'] if courses[course]['id'] != '' else '@default'
-		# 		if task != []:
-		# 			#API.insertNewTask(body=task, tasklist=courseID)
+		for course in courses:
+			for task in courses[course]['tasks']:
+				if task != []:
+					API.insertNewRow(list=task)
 		print("[EADAPP]\t>> Exiting.")
 	except Exception as e:
 		raise e
