@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import os.path
 from json import dumps, loads
 from filterPages import getDataByDict
-
+from time import sleep
 class ScrapEAD(Session):
 	"""docstring for ScrapEAD"""
 	def __init__(self, username, password):
@@ -70,6 +70,7 @@ class ScrapEAD(Session):
 		print("[SCRAP]\t\t>> make sintax of Task...")
 		for course in self.__courses:
 			url = self.__courses[course]['link']
+			sleep(0.01)
 			self.__html_doc = self.get(url).text
 			self.__html_doc = BeautifulSoup(self.__html_doc, self.__type)
 
