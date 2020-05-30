@@ -75,21 +75,32 @@ class ScrapEAD(Session):
 		for course in self.__courses:
 			url = self.__courses[course]['link']
 			sleep(0.01)
+			if "Linguagem" in course:
+				url = url+ "&section=2"
+		
 			self.__html_doc = self.get(url).text
 			self.__html_doc = BeautifulSoup(self.__html_doc, self.__type)
 
 			if course not in self.__tasks:
 				self.__tasks[course] = {'tasks':[]}
+			if "Linguagem" in course:	
+				tags = self.__html_doc.find_all("a", {"class":"instancename"})
+			else:
+				tags = self.__html_doc.find_all("span", {"class":"instancename"})
 
-			span_tags = self.__html_doc.find_all("span", {"class":"instancename"})
+			for tag in tags:
+				if "Linguagem" in course:
+					title = tag.get('data-title')
+				else:
+					title = tag.text
 
-			for span in span_tags:
-				title = span.text
-
-				if (("Quest" in title) or ("Tare" in title) or ("Ativ" in title)) and title not in self.__tasks[course]['tasks']:
+				if (("Quest" in title) or ("Tare" in title) or ("Ativ" in title) or ("N1" in title)) and title not in self.__tasks[course]['tasks']:
 					tempo = str(time.now()).replace('-','/').split('.')[0]
-					tarefaUrl = span.parent.get('href')
-					print(tarefaUrl)
+					if "Linguagem" in course:
+						tarefaUrl = tag.get('href')	
+					else:
+						tarefaUrl = tag.parent.get('href')
+					print(str([[course], [title], [self.getDataEntrega(tarefaUrl)], [tempo]]))
 					self.__courses[course]['tasks'].append([[course], [title], [self.getDataEntrega(tarefaUrl)], [tempo]])
 					self.__tasks[course]['tasks'].append(title)
 			else: 
@@ -104,6 +115,7 @@ class ScrapEAD(Session):
 		sleep(0.01)
 		self.__html_doc = self.post(self.__url+'login/index.php', data=self._payload, verify=self.__ssl_cert).text
 		print("[SCRAP]\t\t>> Done")
+		self.get('https://ead.ifms.edu.br/?canceljssession=1')
 		pass
 
 	def getDataEntrega(self, url):
