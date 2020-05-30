@@ -4,7 +4,6 @@ import os.path
 from json import dumps, loads
 from filterPages import getDataByDict
 from time import sleep
-from datetime import datetime as time
 
 class ScrapEAD(Session):
 	"""docstring for ScrapEAD"""
@@ -18,6 +17,7 @@ class ScrapEAD(Session):
 		self.__ssl_cert = "ead-ifms-edu-br-chain.pem"
 		self.headers.update({'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'})
 		self.__html_doc = None
+		self.__bs_obj = None
 		self.__type =  'html.parser'
 
 		self.__username = username
@@ -26,6 +26,7 @@ class ScrapEAD(Session):
 		self.__session_key = ""
 
 		self._payload = None
+		self._inLinkTask = ['quiz','assign']
 
 		self.__setTaskVar()		
 		pass
@@ -79,14 +80,15 @@ class ScrapEAD(Session):
 				url = url+ "&section=2"
 		
 			self.__html_doc = self.get(url).text
-			self.__html_doc = BeautifulSoup(self.__html_doc, self.__type)
+			self.__bs_obj = BeautifulSoup(self.__html_doc, self.__type)
 
 			if course not in self.__tasks:
 				self.__tasks[course] = {'tasks':[]}
+
 			if "Linguagem" in course:	
-				tags = self.__html_doc.find_all("a", {"class":"instancename"})
+				tags = self.__bs_obj.find_all("a",{"class":"instancename"})
 			else:
-				tags = self.__html_doc.find_all("span", {"class":"instancename"})
+				tags = self.__bs_obj.find_all("span",{"class":"instancename"})
 
 			for tag in tags:
 				if "Linguagem" in course:
@@ -94,15 +96,20 @@ class ScrapEAD(Session):
 				else:
 					title = tag.text
 
-				if (("Quest" in title) or ("Tare" in title) or ("Ativ" in title) or ("N1" in title)) and title not in self.__tasks[course]['tasks']:
-					tempo = str(time.now()).replace('-','/').split('.')[0]
-					if "Linguagem" in course:
-						tarefaUrl = tag.get('href')	
-					else:
-						tarefaUrl = tag.parent.get('href')
-					print(str([[course], [title], [self.getDataEntrega(tarefaUrl)], [tempo]]))
-					self.__courses[course]['tasks'].append([[course], [title], [self.getDataEntrega(tarefaUrl)], [tempo]])
-					self.__tasks[course]['tasks'].append(title)
+				if "Linguagem" in course:
+					tarefaUrl = tag.get('href')	
+				else:
+					tarefaUrl = tag.parent.get('href')
+
+				if tarefaUrl == None:
+					tarefaUrl = ''
+
+				if any(typeTask in tarefaUrl for typeTask in self._inLinkTask):
+					if title not in self.__tasks[course]['tasks']:
+					
+						#print(str([[course], [title], [tarefaUrl]]))
+						self.__courses[course]['tasks'].append([[course], [title], [self.getDataEntrega(tarefaUrl)]])
+						self.__tasks[course]['tasks'].append(title)
 			else: 
 				continue
 		
@@ -119,28 +126,50 @@ class ScrapEAD(Session):
 		pass
 
 	def getDataEntrega(self, url):
-		if url != None:
-			sleep(0.01)
-			text = self.get(url).text
-			data = getDataByDict(text, tag='div', filter={'class':'box quizinfo'})
-			if "NoneType" in str(type(data)):
-				data = getDataByDict(text, tag="td", filter={'class':"cell c1 lastcol"})
-				if "NoneType" in str(type(data)):
-					return ""
-				else:
-					if ',' in data.string:
-						return data.string.split(',')[-2].strip().replace(' ', '/')
-					else:
-						return ""
-			elif len(data.find_all('p') ) <= 1:
-				return ""
-			else:
-				if ',' in data.find_all('p')[-2].string:
-					return data.find_all('p')[-2].string.split(',')[1].strip().replace(' ', '/')
-				else:
-					return ''
+		html = self.get(url).text
+
+		if "quiz" in url:
+			bs_obj = getDataByDict(html=html,tag='div', filter={'class':'box quizinfo'})
+			try:
+				dataList = [tag_p.string.split(',')[1].strip().replace(' ', '/') if "Este" in tag_p.string else '' for tag_p in bs_obj.find_all('p')]
+				
+				for data in dataList:
+					if data != '':
+						return data
+
+				return "Data não encontrada"
+
+			except Exception as e:
+				return 'Data não encontrada'
+			
 		else:
-			return ""
+			bs_obj = getDataByDict(html=html, tag="td", filter={'class':"cell c1 lastcol"})
+			try:
+				return bs_obj.string.split(',')[1].strip().replace(' ','/')
+			except Exception as e:
+				return "Data não encontrada"
+		# if url != None:
+		# 	sleep(0.01)
+		# 	text = self.get(url).text
+		# 	data = getDataByDict(text, tag='div', filter={'class':'box quizinfo'})
+		# 	if "NoneType" in str(type(data)):
+		# 		data = getDataByDict(text, tag="td", filter={'class':"cell c1 lastcol"})
+		# 		if "NoneType" in str(type(data)):
+		# 			return ""
+		# 		else:
+		# 			if ',' in data.string:
+		# 				return data.string.split(',')[-2].strip().replace(' ', '/')
+		# 			else:
+		# 				return ""
+		# 	elif len(data.find_all('p') ) <= 1:
+		# 		return ""
+		# 	else:
+		# 		if ',' in data.find_all('p')[-2].string:
+		# 			return data.find_all('p')[-2].string.split(',')[1].strip().replace(' ', '/')
+		# 		else:
+		# 			return ''
+		# else:
+		# return ""
 
 	def getCourses(self):
 		print("[SCRAP]\t\t>> returning courses...")

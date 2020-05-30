@@ -17,7 +17,7 @@ class SheetsAPI:
 		self.__createService()
 
 		self.__idSheet = '1vNwO9QB0RhjbntqBwPKkS_ns5-O7SdzvdhbC7RaEaYs'
-		self.__range = "A2:D"
+		self.__range = "A2:C"
 
 		self.addrow = self._service.values()
 		#self.tasks = self._service.tasks()
