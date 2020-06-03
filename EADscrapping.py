@@ -131,11 +131,9 @@ class ScrapEAD(Session):
 		if "quiz" in url:
 			bs_obj = getDataByDict(html=html,tag='div', filter={'class':'box quizinfo'})
 			try:
-				dataList = [tag_p.string.split(',')[1].strip().replace(' ', '/') if "Este" in tag_p.string else '' for tag_p in bs_obj.find_all('p')]
+				dataList = [tag_p.string.split(',')[1].strip().replace(' ', '/') for tag_p in bs_obj.find_all('p') if "Este" in tag_p.string ]
 				
-				for data in dataList:
-					if data != '':
-						return data
+				return dataList[0]
 
 				return "Data não encontrada"
 
