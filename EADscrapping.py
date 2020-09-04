@@ -85,17 +85,13 @@ class ScrapEAD(Session):
 			if course not in self.__tasks:
 				self.__tasks[course] = {'tasks':[]}
 
-			if "Linguagem" in course:	
-				tags = self.__bs_obj.find_all("a",{"class":"instancename"})
-			else:
-				tags = self.__bs_obj.find_all("span",{"class":"instancename"})
+			tags = self.__bs_obj.find_all(attrs={"class":"instancename"})
 
 			for tag in tags:
-				if "Linguagem" in course:
-					title = tag.get('data-title')
-				else:
+				title = tag.get('data-title')
+				if title == None:
 					title = tag.text
-
+				
 				if "Linguagem" in course:
 					tarefaUrl = tag.get('href')	
 				else:
