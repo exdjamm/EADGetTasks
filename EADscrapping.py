@@ -92,13 +92,14 @@ class ScrapEAD(Session):
 				if title == None:
 					title = tag.text
 				
-				if "Linguagem" in course:
-					tarefaUrl = tag.get('href')	
-				else:
+				tarefaUrl = tag.get('href')	
+				if tarefaUrl == None:
 					tarefaUrl = tag.parent.get('href')
 
 				if tarefaUrl == None:
 					tarefaUrl = ''
+
+				print(tarefaUrl)
 
 				if any(typeTask in tarefaUrl for typeTask in self._inLinkTask):
 					if title not in self.__tasks[course]['tasks']:
