@@ -96,7 +96,7 @@ class ScrapEAD(Session):
 						self.__courses[course]['tasks'].append({"title":title, "notes":notes})
 						self.__tasks[course]['tasks'].append(title)
 			else: 
-				pass
+				continue
 		
 		print("[SCRAP]\t\t>> Done")
 		pass
