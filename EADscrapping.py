@@ -132,7 +132,7 @@ class ScrapEAD(Session):
 			bs_obj = getDataByDict(html=html,tag='div', filter={'class':'box quizinfo'})
 			try:
 				dataList = [tag_p.string.split(',')[1].strip().replace(' ', '/') for tag_p in bs_obj.find_all('p') if "Este" in tag_p.string ]
-				print(dataList[0])
+				
 				return dataList[0]
 
 			except Exception as e:
