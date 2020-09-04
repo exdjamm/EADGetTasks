@@ -1,6 +1,7 @@
 from TaskAPI import *
 from EADscrapping import *
 import os.path
+from json import dumps, loads
 from os import remove
 
 if __name__ == '__main__':
@@ -46,7 +47,7 @@ if __name__ == '__main__':
 	except Exception as e:
 		with open('copy.json', 'r') as backup:
 			with open('tasks.json', 'w') as issue:
-				issue.write(backup.read())
+				issue.write(dumps(loads(backup.read())))
 		
 		
 	

@@ -117,7 +117,7 @@ class ScrapEAD(Session):
 	def makeCloneFile(file):
 		with open(file, 'r') as original:
 			with open('copy.json', 'w') as copy:
-				copy.write(original.read())
+				copy.write(dumps(loads(original.read())))
 
 
 	def saveTaskJSON(self):
