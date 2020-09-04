@@ -44,7 +44,9 @@ if __name__ == '__main__':
 					API.insertNewTask(body=task, tasklist=courseID)
 		print("[EADAPP]\t>> Exiting.")
 	except Exception as e:
-		print(e) 
+		with open('copy.json', 'r') as backup:
+			with open('tasks.json', 'w') as issue:
+				issue.write(backup.read())
 		
 		
 	

@@ -31,6 +31,7 @@ class ScrapEAD(Session):
 	def __setTaskVar(self):
 		if os.path.exists("tasks.json"):
 			self.__exists = True
+			makeCloneFile('tasks.json')
 			with open("tasks.json", 'r') as doc:
 				self.__tasks = loads(doc.read())
 		else:
@@ -112,6 +113,12 @@ class ScrapEAD(Session):
 		self.saveTaskJSON()
 		print("[SCRAP]\t\t>> Done")
 		return self.__courses
+
+	def makeCloneFile(file):
+		with open(file, 'r') as original:
+			with open('copy.json', 'w') as copy:
+				copy.write(original.read())
+
 
 	def saveTaskJSON(self):
 		print("[SCRAP]\t\t>> Saving task.json...")
