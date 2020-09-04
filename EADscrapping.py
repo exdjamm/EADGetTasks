@@ -106,6 +106,7 @@ class ScrapEAD(Session):
 		self._payload = {"username":self.__username, "password":self.__password, "logintoken":self.__login_token}
 		self.__html_doc = self.post(self.__url+'login/index.php', data=self._payload, verify=self.__ssl_cert).text
 		print("[SCRAP]\t\t>> Done")
+		self.get('https://ead.ifms.edu.br/?canceljssession=1')
 		pass
 
 	def getCourses(self):
