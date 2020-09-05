@@ -31,7 +31,7 @@ class ScrapEAD(Session):
 	def __setTaskVar(self):
 		if os.path.exists("tasks.json"):
 			self.__exists = True
-			makeCloneFile('tasks.json')
+			self.makeCloneFile('tasks.json')
 			with open("tasks.json", 'r') as doc:
 				self.__tasks = loads(doc.read())
 		else:
@@ -39,7 +39,7 @@ class ScrapEAD(Session):
 
 	def setSessionKey(self):
 		print("[SCRAP]\t\t>> get SessionKey...")
-		self.__session_key = getDataByDict(self.__html_doc, tag='a', filter={'data-title':'logout,moodle'}, data='href').split('=')[1]
+		self.__session_key = getDataByDict(self.__html_doc, tag='a', filter={'data-title':'logout,moodle'}, value='href').split('=')[1]
 		#BeautifulSoup(self.__html_doc, self.__type).find("a", {'data-title':'logout,moodle'})["href"].split("=")[1]
 		print("[SCRAP]\t\t>> Done")
 		pass
@@ -47,7 +47,7 @@ class ScrapEAD(Session):
 	def setToken(self):
 		print("[SCRAP]\t\t>> get Token...")
 		self.__html_doc = self.get(self.__url, verify=self.__ssl_cert).text
-		self.__login_token = getDataByDict(self.__html_doc, tag='input', filter={'name':'logintoken'}, data='value')
+		self.__login_token = getDataByDict(self.__html_doc, tag='input', filter={'name':'logintoken'}, value='value')
 		#self.__login_token = BeautifulSoup(self.__html_doc, self.__type).find('input', {'name':'logintoken'}).get("value")
 		print("[SCRAP]\t\t>> Done")
 		pass
@@ -56,7 +56,7 @@ class ScrapEAD(Session):
 		print("[SCRAP]\t\t>> filter courses...")
 		self._payload = {"sesskey":self.__session_key}
 		self.__html_doc =self.get(self.__url+"blocks/custom_course_menu/interface.php", params=self._payload, verify=self.__ssl_cert).text
-		tags_a = getDataByDict(self.__html_doc, tag='a', filter={"class":"courselist_course scrollable"}, method='all')
+		tags_a = getDataByDict(self.__html_doc, tag='a', filter={"class":"courselist_course scrollable"}, all=True)
 		#tags_a = BeautifulSoup(self.__html_doc, self.__type).find_all('a', {"class":"courselist_course scrollable"})
 		for a in tags_a:
 			course_name = a.span.string 
@@ -115,7 +115,7 @@ class ScrapEAD(Session):
 		print("[SCRAP]\t\t>> Done")
 		return self.__courses
 
-	def makeCloneFile(file):
+	def makeCloneFile(self, file):
 		with open(file, 'r') as original:
 			with open('copy.json', 'w') as copy:
 				copy.write(dumps(loads(original.read())))
