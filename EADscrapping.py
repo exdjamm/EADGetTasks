@@ -78,23 +78,24 @@ class ScrapEAD(Session):
 			if course not in self.__tasks:
 				self.__tasks[course] = {'tasks':[]}
 
-			if not self.__html_doc.find('ul', {'id':"multi_section_tiles"}):
+			tags = self.__html_doc.find_all(attrs={"class":"instancename"})
 
-				span_tags = self.__html_doc.find_all("span", {"class":"instancename"})
+			for tag in tags:
+				title = tag.get('data-title')
+				if title is None:
+					title = tag.text
 
-				for span in span_tags:
-					title = span.text
-					task_type = title.split(' ')[-1]
-					title =  task_type + " - " + title.replace(task_type, '')#course + " - "+
+				# task_type = title.split(' ')[-1]
+				# title =  task_type + " - " + title.replace(task_type, '')
 
-					if "Avisos" not in title and title not in self.__tasks[course]['tasks']:
-						
-						notes = span.parent.get('href')
-						if notes is None:
-							continue
-						#self.__courses[course]['id'] = self.__tasks[course]['id']
-						self.__courses[course]['tasks'].append({"title":title, "notes":notes})
-						self.__tasks[course]['tasks'].append(title)
+				if title not in self.__tasks[course]['tasks']:
+					
+					tarefaUrl = tag.get('href')	
+					if tarefaUrl is None:
+						tarefaUrl = tag.parent.get('href')
+					
+					self.__courses[course]['tasks'].append({"title":title, "notes":tarefaUrl})
+					self.__tasks[course]['tasks'].append(title)
 			else: 
 				continue
 		
