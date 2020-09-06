@@ -61,7 +61,7 @@ class ScrapEAD(Session):
 		for a in tags_a:
 			course_name = a.span.string 
 
-			if "2020" in course_name:
+			if "2020-2" in course_name:
 				course_name = course_name.split('-')[-1].strip()
 				self.__courses[course_name] = {"link":a['href'], 'tasks':[]}
 		print("[SCRAP]\t\t>> Done.")
