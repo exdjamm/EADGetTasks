@@ -135,3 +135,6 @@ credentials.json
 login.json
 /test
 copy.json
+
+# Paths
+/tests
