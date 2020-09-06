@@ -76,8 +76,6 @@ class ScrapEAD(Session):
 		for course in self.__courses:
 			url = self.__courses[course]['link']
 			sleep(0.01)
-			if "Linguagem" in course:
-				url = url+ "&section=2"
 		
 			self.__html_doc = self.get(url).text
 			self.__bs_obj = BeautifulSoup(self.__html_doc, self.__type)
