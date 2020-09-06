@@ -134,3 +134,6 @@ token.pickle
 credentials.json
 login.json
 copy.json
+
+# Paths
+/tests
