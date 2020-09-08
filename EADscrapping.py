@@ -4,12 +4,14 @@ import os.path
 from json import dumps, loads
 from filterPages import getDataByDict
 from time import sleep
+
 class ScrapEAD(Session):
 	"""docstring for ScrapEAD"""
 	def __init__(self, username, password):
 		super(ScrapEAD, self).__init__()
 		self.__courses = {}
 		self.__num_of_courses = 0
+		self.__filter_courses = ['2020-2', '2020/2', "F4"]
 
 		self.__tasks = {}
 		self.__url = "https://ead.ifms.edu.br/"
@@ -61,7 +63,7 @@ class ScrapEAD(Session):
 		for a in tags_a:
 			course_name = a.span.string 
 
-			if "2020-2" in course_name:
+			if any(term in course_name for term in self.__filter_courses):
 				course_name = course_name.split('-')[-1].strip()
 				self.__courses[course_name] = {"link":a['href'], 'tasks':[]}
 		print("[SCRAP]\t\t>> Done.")
