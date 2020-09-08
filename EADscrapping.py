@@ -11,7 +11,7 @@ class ScrapEAD(Session):
 		super(ScrapEAD, self).__init__()
 		self.__courses = {}
 		self.__num_of_courses = 0
-		self.__filter_courses = ['2020-2', '2020/2', "F4"]
+		self.__filter_courses = ['2020-2', '2020/2']
 
 		self.__tasks = {}
 		self.__url = "https://ead.ifms.edu.br/"
