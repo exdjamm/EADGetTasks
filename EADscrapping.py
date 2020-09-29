@@ -165,5 +165,5 @@ if __name__ == '__main__':
 	courses = main.getCourses()
 	for course in courses:
 		for task in courses[course]['tasks']:
-			print(str(task))
+			print(str(task['title']))
 	#print(res.status_code)
