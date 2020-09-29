@@ -4,7 +4,7 @@ Um script de web scrapping para pegar os dados de novas tarefas do sistema EAD d
 # EADscrapping
 ## Returning
 Return the following schema of dict:
-{
+```{
     'Course Name' : 
     {
         'tasks' :
@@ -18,3 +18,4 @@ Return the following schema of dict:
     }
     ...
 }
+```
