@@ -2,8 +2,11 @@
 Um script de web scrapping para pegar os dados de novas tarefas do sistema EAD de minha escola e criar tarefas atraves da API do Google Task.
 
 ## Classes
-### ScrapEAD()
-> Send a username and a password ```python newScrap = ScrapEAD(username, passoword)```
+### ScrapEAD(username, password)
+- username
+> User's login 
+- password 
+> User's password
 #### Variables
 - No one for now :(
 #### Methods
