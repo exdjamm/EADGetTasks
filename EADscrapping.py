@@ -11,7 +11,7 @@ class ScrapEAD(Session):
 		super(ScrapEAD, self).__init__()
 		self.__courses = {}
 		self.__num_of_courses = 0
-		self.__filter_courses = ['2020-2', '2020/2']
+		self.__filter_courses = ['2020-2', '2020/2', 'F4']
 
 		self.__tasks = {}
 		self.__url = "https://ead.ifms.edu.br/"
@@ -98,8 +98,29 @@ class ScrapEAD(Session):
 					
 					self.__courses[course]['tasks'].append({"title":title, "notes":tarefaUrl})
 					self.__tasks[course]['tasks'].append(title)
-			else: 
-				continue
+			else : 
+				for section in range(len(self.__html_doc.find_all(attrs={'class':'tile'}))):
+					self.__html_doc = self.get(url + f"&section={section}").text
+					self.__html_doc = BeautifulSoup(self.__html_doc, self.__type)
+					# print(self.__html_doc.find_all(attrs={'class':'tile'})[section].text)
+					tags = self.__html_doc.find_all(attrs={"class":"instancename"})
+					for tag in tags:
+						title = tag.get('data-title')
+						if title is None:
+							title = tag.text
+
+						# task_type = title.split(' ')[-1]
+						# title =  task_type + " - " + title.replace(task_type, '')
+
+						if title not in self.__tasks[course]['tasks']:
+							
+							tarefaUrl = tag.get('href')	
+							if tarefaUrl is None:
+								tarefaUrl = tag.parent.get('href')
+							
+							self.__courses[course]['tasks'].append({"title":title, "notes":tarefaUrl})
+							self.__tasks[course]['tasks'].append(title)
+			
 		
 		print("[SCRAP]\t\t>> Done")
 		pass
