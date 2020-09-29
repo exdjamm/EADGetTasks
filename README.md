@@ -3,11 +3,7 @@ Um script de web scrapping para pegar os dados de novas tarefas do sistema EAD d
 
 ## Classes
 ### ScrapEAD()
-> Send a username and a password
-
-´´´python
-newScrap = ScrapEAD(username, passoword)
-´´´
+> Send a username and a password ```python newScrap = ScrapEAD(username, passoword)```
 #### Variables
 - No one for now :(
 #### Methods
