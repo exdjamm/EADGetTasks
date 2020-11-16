@@ -97,11 +97,11 @@ class ScrapEAD(Session):
 						tarefaUrl = tag.parent.get('href')
 					
 					if 'quiz' in tarefaUrl:
-						title += "Q-"		
+						title += " Q-"		
 					elif 'assign' in tarefaUrl:
-						title += "T-"
+						title += " T-"
 					elif 'forum' in tarefaUrl:
-						title += "F-"
+						title += " F-"
 					else:
 						title += "ETC"
 
