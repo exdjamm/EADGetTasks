@@ -95,15 +95,17 @@ class ScrapEAD(Session):
 					tarefaUrl = tag.get('href')	
 					if tarefaUrl is None:
 						tarefaUrl = tag.parent.get('href')
-					
-					if 'quiz' in tarefaUrl:
-						title += " Q-"		
-					elif 'assign' in tarefaUrl:
-						title += " T-"
-					elif 'forum' in tarefaUrl:
-						title += " F-"
-					else:
-						title += "ETC"
+					if tarefaUrl is None:
+						tarefaUrl = ''
+
+#					if 'quiz' in tarefaUrl:
+#						title += " Q-"		
+#					elif 'assign' in tarefaUrl:
+#						title += " T-"
+#					elif 'forum' in tarefaUrl:
+#						title += " F-"
+#					else:
+#						title += "ETC"
 
 					self.__courses[course]['tasks'].append({"title":title, "notes":tarefaUrl})
 					self.__tasks[course]['tasks'].append(title)
@@ -127,14 +129,14 @@ class ScrapEAD(Session):
 							if tarefaUrl is None:
 								tarefaUrl = tag.parent.get('href')
 
-							if 'quiz' in tarefaUrl:
-								title += "Q-"
-							elif 'assign' in tarefaUrl:
-								title += "T-"
-							elif 'forum' in tarefaUrl:
-								title += "F-"
-							else:
-								title += "ETC"
+#							if 'quiz' in tarefaUrl:
+#								title += "Q-"
+#							elif 'assign' in tarefaUrl:
+#								title += "T-"
+#							elif 'forum' in tarefaUrl:
+#								title += "F-"
+#							else:
+#								title += "ETC"
 
 							self.__courses[course]['tasks'].append({"title":title, "notes":tarefaUrl})
 							self.__tasks[course]['tasks'].append(title)
