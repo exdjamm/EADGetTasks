@@ -1,7 +1,6 @@
 # EADGetTasks
 Um script de web scrapping para pegar os dados de novas tarefas do sistema EAD de minha escola e criar tarefas atraves da API do Google Task.
 
-
 ## Como usar ?
 ### Com Google Tasks
 
@@ -10,6 +9,7 @@ Para funcionar com o Google Tasks, aplicativo de tarefas do Google, primeirament
 - Acesse URL : https://developers.google.com/tasks/quickstart/python e sega o passo 1.
 
 O proprio Google faz tudo automaticamente, então não é necessario outras configurações, assim clique em **next**, depois **create**, ele dará a opção de baixar um arquivo. 
+
 Baixe clicando em **DOWNLOAD CLIENT CONFIGURATION** e coloque na pasta onde esta o arquivo *main.py*.
 
 - Siga para o passo dois e rode a instalação pedida.
@@ -24,17 +24,12 @@ O codigo ainda não esta bem estruturado, então, peço que caso necessite estud
 
 ## Esquema de Classes
 ### ScrapEAD(username, password)
-
 - username
-
 > User's login 
-
 - password 
-
 > User's password
 
 #### Variables
-
 - No one for now :(
 
 #### Methods
