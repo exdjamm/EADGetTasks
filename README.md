@@ -6,7 +6,7 @@ Um script de web scrapping para pegar os dados de novas tarefas do sistema EAD d
 
 Para funcionar com o Google Tasks, aplicativo de tarefas do Google, primeiramente será necessario criar uma API. 
 
-- Acesse URL : https://developers.google.com/tasks/quickstart/python e sega o passo 1.
+- Acesse https://developers.google.com/tasks/quickstart/python e sega o passo 1.
 
 O proprio Google faz tudo automaticamente, então não é necessario outras configurações, assim clique em **next**, depois **create**, ele dará a opção de baixar um arquivo. 
 
@@ -14,7 +14,7 @@ Baixe clicando em **DOWNLOAD CLIENT CONFIGURATION** e coloque na pasta onde esta
 
 - Siga para o passo dois e rode a instalação pedida.
 
-> Dependendo do Sistema Operacional e versão do python o comando pode ser diferente URL : https://www.treinaweb.com.br/blog/gerenciando-pacotes-em-projetos-python-com-o-pip/
+> Dependendo do Sistema Operacional e versão do python o comando pode ser diferente https://www.treinaweb.com.br/blog/gerenciando-pacotes-em-projetos-python-com-o-pip/
 
 Agora rode o *main.py*, ele irá pedir seu login e senha na primeira vez que rodar, apos isso ele ira pegar suas atividades e outros do EAD IFMS. Apos ele pegar todas as atividades, ele ira abrir uma aba no navegador e pedir para logar com o Google, aceite e logo apos ele ira mandar para o seu Google Tasks.
 
