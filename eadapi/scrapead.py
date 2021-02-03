@@ -12,7 +12,7 @@ class ScrapEad(SessionEad):
 		self.__tasks_data = list()
 
 		# init data courses
-		self.__set_tasks_courses()
+		self.__set_courses_data()
 
 		pass
 
@@ -144,4 +144,4 @@ if __name__ == '__main__':
 	courses = ead.get_courses_data()
 
 	for course in courses:
-		print(course['title'])
+		print(course['course_name'])
