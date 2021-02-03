@@ -48,14 +48,14 @@ class ScrapEad(SessionEad):
 			# Para cada tag <a> que esta o nome do curso e seu link, pega o nome do curso e o link.
 			# Adiciona a estrutura __courses_data
 			
-			course_name = clear_name(a_tag.span.string)
+			course_name = a_tag.span.string
 			link =  a_tag['href']
 
 			test = [term in course_name for term in FILTER_COURSES]
 
 			# Verifica se o nome do curso passa no filtro passado.
 			if any(test):
-				data = {"course_name": f"{course_name}", "link": f"{link}" }
+				data = {"course_name": f"{clear_name(course_name)}", "link": f"{link}" }
 				self.__courses_data.append(data)
 
 
