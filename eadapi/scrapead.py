@@ -39,7 +39,7 @@ class ScrapEad(SessionEad):
 		url = self._url(url_path)
 		
 		payload = {"sesskey" : self._session_key}
-		response_text = self.get(url, params=password).text
+		response_text = self.get(url, params=payload).text
 
 		# Pega todas as tags html <a> com o filtro passado
 		a_tags = self._filter_data(response_text, tag='a', filter={"class":"courselist_course scrollable"}, all=True)
