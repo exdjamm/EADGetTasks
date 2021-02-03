@@ -11,6 +11,9 @@ class ScrapEad(SessionEad):
 		self.__courses_data = list()
 		self.__tasks_data = list()
 
+		# init data courses
+		self.__set_tasks_courses()
+
 		pass
 
 	def get_tasks_data(self, force_update=False):
@@ -21,11 +24,7 @@ class ScrapEad(SessionEad):
 			
 		return self.__tasks_data
 
-	def get_courses_data(self, force_update=False):
-
-		condition = (force_update) or (self.__courses_data == [])
-		if condition:
-			self.__set_tasks_courses()
+	def get_courses_data(self):
 			
 		return self.__courses_data
 
@@ -56,7 +55,7 @@ class ScrapEad(SessionEad):
 
 			# Verifica se o nome do curso passa no filtro passado.
 			if any(test):
-				data = {"course_name": f"{course_name}", "link": f"{link}" , "tasks":list()}
+				data = {"course_name": f"{course_name}", "link": f"{link}" }
 				self.__courses_data.append(data)
 
 
