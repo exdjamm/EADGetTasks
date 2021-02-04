@@ -50,12 +50,13 @@ class ScrapEad(SessionEad):
 			
 			course_name = a_tag.span.string
 			link =  a_tag['href']
+			course_id = link.split('=')[-1]
 
 			test = [term in course_name for term in FILTER_COURSES]
 
 			# Verifica se o nome do curso passa no filtro passado.
 			if any(test):
-				data = {"course_name": f"{clear_name(course_name)}", "link": f"{link}" }
+				data = {"course_name": f"{clear_name(course_name)}", "link": f"{link}", 'course_id':f'{course_id}'}
 				self.__courses_data.append(data)
 
 
@@ -70,7 +71,7 @@ class ScrapEad(SessionEad):
 
 			return result
 
-		def get_task_data_from_tag(task_tag) -> dict:
+		def get_task_data_from_tag(task_tag, course_id) -> dict:
 			# Pega os dados de titulo e link de tarefa da tag passada
 
 			# Tratamento do titulo
@@ -89,14 +90,16 @@ class ScrapEad(SessionEad):
 				link = ''
 
 			# Salvando as informações em um dicionario
-			dict_data = {'title': f'{title}', 'link': f"{link}"}
+			dict_data = {'title': f'{title}', 'link': f"{link}", 'course_id': f"{course_id}"}
 
 			return dict_data
 
 		def save_tasks_data(task_tags, course_data) -> None:
+			course_id = course_data['course_id']
+
 			for task_tag in task_tags:
 				
-				task_data = get_task_data_from_tag(task_tag)				
+				task_data = get_task_data_from_tag(task_tag, course_id)				
 
 				is_to_save = not is_task_already_save(task_data.get('title'))
 
