@@ -1,7 +1,7 @@
 from sessionead import SessionEad
 
 class ScrapEad(SessionEad):
-	def __init__(self, login, password, filter_courses):
+	def __init__(self, login: str, password: str, filter_courses: list, filter_tasks):
 		super(ScrapEad, self).__init__(login, password)
 
 		# starts variables
@@ -10,6 +10,7 @@ class ScrapEad(SessionEad):
 
 		# get values from parameter
 		self.__filter_courses = filter_courses
+		self.__filter_tasks = filter_tasks
 
 		# init data courses
 		self.__set_courses_data()
@@ -63,13 +64,6 @@ class ScrapEad(SessionEad):
 
 	def __set_tasks_courses(self) -> None:
 
-		def is_task_already_save(task_title: str):
-			# Verifica se a tarefa passada ja esta salva no banco de dados
-
-			result = True #test()
-
-			return result
-
 		def get_task_data_from_tag(task_tag, course_id) -> dict:
 			# Pega os dados de titulo e link de tarefa da tag passada
 
@@ -100,7 +94,7 @@ class ScrapEad(SessionEad):
 				
 				task_data = get_task_data_from_tag(task_tag, course_id)				
 
-				is_to_save = not is_task_already_save(task_data.get('title'))
+				is_to_save = not self.__filter_tasks(task_data)
 
 				if is_to_save:
 					course_data['tasks'].append(task_data)
