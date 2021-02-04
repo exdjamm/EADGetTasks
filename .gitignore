@@ -136,4 +136,4 @@ login.json
 copy.json
 
 # Paths
-/tests
+/test*
