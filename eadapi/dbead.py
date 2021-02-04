@@ -18,7 +18,3 @@ class DbEadInterface(ABC):
 	@abstractmethod
 	def select_tasks(self) -> list:
 		pass
-
-	@abstractmethod
-	def save_changes(self) -> None:
-		pass
