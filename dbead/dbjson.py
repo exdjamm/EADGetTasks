@@ -26,6 +26,9 @@ class DbEadJson(DbEadInterface):
 		pass
 	
 	def save_changes(self) -> None:
+		path = f'{self.path}{self.file}'
+		with open(path, 'w') as db_json:
+			db_json.write(dumps(self.__db_instance))
 		pass
 
 	def __init_db_instance(self):
@@ -38,7 +41,7 @@ class DbEadJson(DbEadInterface):
 			else:
 				self.__db_instance = {'courses_table':[], 'tasks_table':[]}
 
-				db_json.write(dumps(self.__db_instance))
+				self.save_changes()
 
 		pass
 
