@@ -1,15 +1,15 @@
 from sessionead import SessionEad
 
-# Consts
-FILTER_COURSES = ['2020-2', '2020/2', 'F4']
-
 class ScrapEad(SessionEad):
-	def __init__(self, login, password):
+	def __init__(self, login, password, filter_courses):
 		super(ScrapEad, self).__init__(login, password)
 
 		# starts variables
 		self.__courses_data = list()
 		self.__tasks_data = list()
+
+		# get values from parameter
+		self.__filter_courses = filter_courses
 
 		# init data courses
 		self.__set_courses_data()
@@ -29,7 +29,6 @@ class ScrapEad(SessionEad):
 		return self.__courses_data
 
 	def __set_courses_data(self):
-		global FILTER_COURSES
 
 		# Limpa o nome pego do site
 		def clear_name(name: str) -> str:
@@ -52,7 +51,7 @@ class ScrapEad(SessionEad):
 			link =  a_tag['href']
 			course_id = link.split('=')[-1]
 
-			test = [term in course_name for term in FILTER_COURSES]
+			test = [term in course_name for term in self.__filter_courses]
 
 			# Verifica se o nome do curso passa no filtro passado.
 			if any(test):
