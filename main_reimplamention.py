@@ -34,6 +34,11 @@ def filter_tasks(task_data) -> bool:
 
 	return filter_result
 
+def upload_to_tasks_plataform(tasks_list):
+	global db
+
+	pass
+
 def main():
 	global db
 
@@ -50,7 +55,9 @@ def main():
 	db.add_task(tasks_list)
 
 	db.save_change()
-	
+
+	upload_to_tasks_plataform(tasks_list)
+
 	pass
 
 if __name__ == '__main__':
