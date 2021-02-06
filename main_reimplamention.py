@@ -46,6 +46,11 @@ def main():
 	courses_list = ead_data.get_courses_data()
 	tasks_list = ead_data.get_tasks_data(filter_tasks)
 
+	db.add_course(courses_list)
+	db.add_task(tasks_list)
+
+	db.save_change()
+	
 	pass
 
 if __name__ == '__main__':
