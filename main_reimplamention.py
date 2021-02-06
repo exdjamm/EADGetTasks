@@ -24,9 +24,15 @@ def get_login():
 def filter_tasks(task_data) -> bool:
 	global db
 
-	result = bool()
+	filter_result = bool()	
+	field = "title"
 
-	return result
+	field_data = task_data[field]
+	query_result = db.select_tasks(field, field_data)
+
+	filter_result = True if len(query_result) > 0 else False
+
+	return filter_result
 
 def main():
 	global db
@@ -38,9 +44,7 @@ def main():
 	ead_data = scrapead.ScrapEad(login, password)
 
 	courses_list = ead_data.get_courses_data()
-	tasks_list = ead_data.get_tasks_data()
-
-
+	tasks_list = ead_data.get_tasks_data(filter_tasks)
 
 	pass
 
