@@ -1,4 +1,4 @@
-from sessionead import SessionEad
+from eadapi.sessionead import SessionEad
 
 class ScrapEad(SessionEad):
 	def __init__(self, login: str, password: str, filter_courses: list, filter_tasks):

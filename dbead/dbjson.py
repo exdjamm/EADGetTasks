@@ -1,4 +1,4 @@
-from dbead import DbEadInterface
+from dbead.dbinterface import DbEadInterface
 
 import os.path as sys_path
 from json import loads, dumps

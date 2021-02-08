@@ -1,6 +1,6 @@
 #!/bin/python3.8
 from requests import Session
-from scrap_utils import getDataByDict
+from eadapi.scrap_utils import getDataByDict
 
 # class for files in tasks : fileuploadsubmission
 
