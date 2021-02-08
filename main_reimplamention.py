@@ -11,7 +11,7 @@ def get_login():
 	login = list()
 
 	if file_exists:
-		with open(name_file, 'rw') as login_data:
+		with open(name_file, 'r') as login_data:
 			login = loads(login_data.read())	
 
 	else:
