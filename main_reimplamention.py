@@ -8,18 +8,23 @@ def get_login():
 	name_file = 'login.json'
 	file_exists = path.exists(name_file)
 
-	with open(name_file, 'rw') as login_data:
-		login = list()
+	login = list()
 
-		if not file_exists:
+	if file_exists:
+		with open(name_file, 'rw') as login_data:
+			login = loads(login_data.read())	
+
+	else:
+		with open(name_file, 'w') as login_data:
 			login = [
 					input('Login: '), 
 					input('Password: ')
 				]
-		else:
-			login = loads(login_data.read())
 
-		return login
+			login_data.write(dumps(login))
+
+
+	return login
 
 def filter_tasks(task_data) -> bool:
 	global db
