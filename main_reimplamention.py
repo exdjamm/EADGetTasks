@@ -1,7 +1,7 @@
 from eadapi import scrapead 
 from dbead import dbjson
 
-import sys.path as path
+import os.path as path
 from json import loads, dumps
 
 def get_login():
