@@ -51,10 +51,10 @@ def main():
 
 	login, password = get_login()
 
-	ead_data = scrapead.ScrapEad(login, password)
+	ead_data = scrapead.ScrapEad(login, password, filter_tasks)
 
 	courses_list = ead_data.get_courses_data()
-	tasks_list = ead_data.get_tasks_data(filter_tasks)
+	tasks_list = ead_data.get_tasks_data()
 
 	db.add_course(courses_list)
 	db.add_task(tasks_list)
