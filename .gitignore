@@ -134,6 +134,7 @@ token.pickle
 credentials.json
 login.json
 copy.json
+db.json
 
 # Paths
 /test*
