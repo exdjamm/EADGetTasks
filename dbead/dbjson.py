@@ -43,7 +43,7 @@ class DbEadJson(DbEadInterface):
 			if task[field] == data:
 				return task
 
-		tasks_selected = list(map( filter_tasks), self.__db_instance['tasks_table'])
+		tasks_selected = list(map( filter_tasks, self.__db_instance['tasks_table']))
 
 		return tasks_selected
 	
