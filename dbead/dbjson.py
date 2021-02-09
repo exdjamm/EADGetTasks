@@ -34,7 +34,7 @@ class DbEadJson(DbEadInterface):
 			if course[field] == data:
 				return course
 
-		courses_selected = list(map(self.__db_instance['courses_table'], filter_courses))
+		courses_selected = list(map(filter_courses, self.__db_instance['courses_table']))
 
 		return courses_selected
 	
@@ -43,7 +43,7 @@ class DbEadJson(DbEadInterface):
 			if task[field] == data:
 				return task
 
-		tasks_selected = list(map(self.__db_instance['tasks_table'], filter_tasks))
+		tasks_selected = list(map( filter_tasks), self.__db_instance['tasks_table'])
 
 		return tasks_selected
 	
