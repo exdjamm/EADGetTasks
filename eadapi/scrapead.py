@@ -97,7 +97,7 @@ class ScrapEad(SessionEad):
 				is_to_save = not self.__filter_tasks(task_data)
 
 				if is_to_save:
-					course_data['tasks'].append(task_data)
+					# course_data['tasks'].append(task_data)
 					self.__tasks_data.append(task_data)
 
 			pass
