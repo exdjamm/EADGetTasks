@@ -59,7 +59,7 @@ def main():
 	db.add_course(courses_list)
 	db.add_task(tasks_list)
 
-	db.save_change()
+	db.save_changes()
 
 	upload_to_tasks_plataform(tasks_list)
 
