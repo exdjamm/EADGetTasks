@@ -51,7 +51,7 @@ def main():
 
 	login, password = get_login()
 
-	ead_data = scrapead.ScrapEad(login, password, ['2020-2', '2020/2', 'F4'],filter_tasks)
+	ead_data = scrapead.ScrapEad(login, password, ['2021-1', '2021/2'],filter_tasks)
 
 	courses_list = ead_data.get_courses_data()
 	tasks_list = ead_data.get_tasks_data()
