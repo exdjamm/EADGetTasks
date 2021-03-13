@@ -1,5 +1,6 @@
 from eadapi import scrapead 
 from dbead import dbjson
+from tasksplataform import googletasks
 
 import os.path as path
 from json import loads, dumps
@@ -41,6 +42,25 @@ def filter_tasks(task_data) -> bool:
 
 def upload_to_tasks_plataform(tasks_list):
 	global db
+
+	tasks_plataform = googletasks.GoogleTask()
+
+	for task in tasks_list:
+		data_task = {
+			"title": task['title'], 
+			"notes": task['link']
+		}
+
+		task_course_id = task['course_id']
+
+		task_course = db.select_courses('course_id', task_course_id)
+		task_course = [ i for i in task_course if i != None]
+		task_course = task_course[0]
+		
+		name_course = task_course['course_name']
+
+		id_tasklist = tasks_plataform.create_list(name)
+		tasks_plataform.add_task_to_list(id_tasklist, data_task)		
 
 	pass
 
