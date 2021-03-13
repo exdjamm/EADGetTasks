@@ -46,7 +46,7 @@ class GoogleTask(TasksInterface, GoogleApi):
 		for list_item in self.__lists:
 			list_name = list_item['title']
 
-			lists_name.append(lists_name)
+			lists_name.append(list_name)
 
 			pass
 
