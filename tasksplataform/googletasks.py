@@ -19,8 +19,13 @@ class GoogleTask(TasksInterface, GoogleApi):
 		pass
 
 	def create_list(self, name) -> str:
-		result = self.__tasklists.insert(body={'title': name}).execute()
-		id_list = result['id']
+		id_list = ''
+
+		if name not in self.get_lists_name():
+			result = self.__tasklists.insert(body={'title': name}).execute()
+			id_list = result['id']
+		else:
+			id_list = self.search_list(name)
 
 		return id_list
 	
