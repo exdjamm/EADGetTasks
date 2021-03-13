@@ -8,7 +8,7 @@ class TasksInterface(ABC):
 		pass
 
 	@abstractmethod
-	def get_lists_names(self, name) -> list:
+	def get_lists(self) -> list:
 		pass
 
 	@abstractmethod
@@ -16,7 +16,7 @@ class TasksInterface(ABC):
 		pass
 
 	@abstractmethod
-	def add_task_to_list(self, id_list) -> None:
+	def add_task_to_list(self, id_list, data) -> None:
 		pass
 
 
