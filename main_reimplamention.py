@@ -56,10 +56,10 @@ def upload_to_tasks_plataform(tasks_list):
 		task_course = db.select_courses('course_id', task_course_id)
 		task_course = [ i for i in task_course if i != None]
 		task_course = task_course[0]
-		
-		name_course = task_course['course_name']
 
-		id_tasklist = tasks_plataform.create_list(name)
+		name_course = task_course['course_name']
+		
+		id_tasklist = tasks_plataform.create_list(name_course)
 		tasks_plataform.add_task_to_list(id_tasklist, data_task)		
 
 	pass
