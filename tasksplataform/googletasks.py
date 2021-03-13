@@ -11,8 +11,8 @@ class GoogleTask(TasksInterface, GoogleApi):
 
 		self.__lists = None
 
-		self.__tasklists = self._google_service.tasklists()
-		self.__tasks = self._google_service.tasks()
+		self.__tasklists = self.google_service.tasklists()
+		self.__tasks = self.google_service.tasks()
 
 		self.__update_list()
 
@@ -30,7 +30,7 @@ class GoogleTask(TasksInterface, GoogleApi):
 		return id_list
 	
 	def __update_list(self) -> None:	
-		self.__lists = self.tasklists.list().execute()['items']:
+		self.__lists = self.__tasklists.list().execute()['items']
 		pass
 
 	def get_lists(self) -> list:
