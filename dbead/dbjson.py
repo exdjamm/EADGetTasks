@@ -27,12 +27,6 @@ class DbEadJson(DbEadInterface):
 		else:
 			self.__db_instance['tasks_table'].append(data)
 		pass
-	
-	def select_all_courses(self) -> list:
-		return self.__db_instance['courses_table']
-
-	def select_all_tasks(self) -> list:
-		return self.__db_instance["tasks_table"]
 
 	def select_courses(self, field: str, data) -> list:
 
