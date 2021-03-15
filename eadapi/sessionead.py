@@ -42,7 +42,7 @@ class SessionEad(Session):
 
 	def __set_login_token(self) -> None:
 		response_text = self.get(self._url(), ).text
-		login_token = self._filter_data(response_text, tag="input", filters={"name":"login_token"}, value="value")
+		login_token = self._filter_data(response_text, tag="input", filters={"name":"logintoken"}, value="value")
 
 		self._login_token = login_token
 		pass
