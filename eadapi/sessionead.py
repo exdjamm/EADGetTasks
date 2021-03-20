@@ -24,6 +24,9 @@ class SessionEad(Session):
 		self._login_token = str() 
 		self._session_key = str()
 
+		# Shutdown the need for load JS in the pages
+		self.get(self._url(), params={"canceljssession":1})
+
 		self.__login(username, password)
 		pass
 
