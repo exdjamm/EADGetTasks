@@ -118,16 +118,15 @@ class ScrapEad(SessionEad):
 
 				save_tasks_data(task_tags, course_data)
 
-			else:
 
-				list_of_section = self._filter_data(response_text, filter={'class':'tile'}, all=True)
-				for section in range( len( list_of_section ) ):
+			list_of_section = self._filter_data(response_text, filter={'class':'tile'}, all=True)
+			for section in range( len( list_of_section ) ):
 
-					payload = {'section': section}
-					response_text = self.get(link, params=payload, timeout=3).text
-					task_tags = self._filter_data(response_text, filter={"class":"instancename"}, all=True)
+				payload = {'section': section}
+				response_text = self.get(link, params=payload, timeout=3).text
+				task_tags = self._filter_data(response_text, filter={"class":"instancename"}, all=True)
 
-					save_tasks_data(task_tags, course_data)
+				save_tasks_data(task_tags, course_data)
 
 		# Fim For
 
