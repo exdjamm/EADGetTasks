@@ -64,5 +64,15 @@ class GoogleTask(TasksInterface, GoogleApi):
 		return id_list
 
 	def add_task_to_list(self, id_list, data) -> None:
-		self.__tasks.insert(tasklist=id_list, body=data).execute() 
+		insert = False
+
+		while not insert:
+			try:
+				self.__tasks.insert(tasklist=id_list, body=data).execute() 
+				insert = True
+
+			except Exception as e:
+				insert = False
+				continue
+		
 		pass
