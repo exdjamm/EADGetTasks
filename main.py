@@ -36,6 +36,8 @@ def filter_tasks(task_data) -> bool:
 	field_data = task_data[field]
 	query_result = db.select_tasks(field, field_data)
 
+	query_result = [result for result in query_result if result != None]
+
 	filter_result = True if len(query_result) > 0 else False
 
 	return filter_result

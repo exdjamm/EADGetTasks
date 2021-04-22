@@ -1,4 +1,6 @@
 from eadapi.sessionead import SessionEad
+from time import sleep
+
 
 class ScrapEad(SessionEad):
 	def __init__(self, login: str, password: str, filter_courses: list, filter_tasks):
@@ -113,6 +115,7 @@ class ScrapEad(SessionEad):
 			response_text = self.get(link).text
 			task_tags = self._filter_data(response_text, filter={"class":"instancename"}, all=True)
 
+
 			# Test if task_tags is empty
 			if len(task_tags) != 0:
 
@@ -122,8 +125,9 @@ class ScrapEad(SessionEad):
 			list_of_section = self._filter_data(response_text, filter={'class':'tile'}, all=True)
 			for section in range( len( list_of_section ) ):
 
+
 				payload = {'section': section}
-				response_text = self.get(link, params=payload, timeout=3).text
+				response_text = self.get(link, params=payload, timeout=5).text
 				task_tags = self._filter_data(response_text, filter={"class":"instancename"}, all=True)
 
 				save_tasks_data(task_tags, course_data)
