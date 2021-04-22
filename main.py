@@ -73,18 +73,28 @@ def main():
 
 	login, password = get_login()
 
+	print("\n[System] START OF SCRAP")
+
 	ead_data = scrapead.ScrapEad(login, password, ['2021-1', '2021/2'],filter_tasks)
 
 	courses_list = ead_data.get_courses_data()
 	tasks_list = ead_data.get_tasks_data()
+
+	print("\n[System] END OF SCRAP")
+
+	print("\n[System] START OF DB")
 
 	db.add_course(courses_list)
 	db.add_task(tasks_list)
 
 	db.save_changes()
 
+	print("\n[System] START OF TO-DO")
+
 	upload_to_tasks_plataform(tasks_list)
 
+
+	print("\n[System] END OF System")
 	pass
 
 if __name__ == '__main__':

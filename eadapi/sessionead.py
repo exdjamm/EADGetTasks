@@ -26,6 +26,8 @@ class SessionEad(Session):
 
 		# Shutdown the need for load JS in the pages
 		self.get(self._url(), params={"canceljssession":1})
+		
+		print("[Session]\t Starts ...")
 
 		self.__login(username, password)
 		pass
@@ -44,8 +46,12 @@ class SessionEad(Session):
 		return url
 
 	def __set_login_token(self) -> None:
+		print("[Session]\t Get Token ...")
+		
 		response_text = self.get(self._url(), ).text
 		login_token = self._filter_data(response_text, tag="input", filters={"name":"logintoken"}, value="value")
+
+		print("[Session]\t Done")
 
 		self._login_token = login_token
 		pass
@@ -53,10 +59,14 @@ class SessionEad(Session):
 	def __set_session_key(self, to_filter_text: str) -> None:
 		session_key = getDataByDict(to_filter_text, tag='a', filter={'data-title':'logout,moodle'}, value='href').split('=')[1]
 		
+		print("[Session]\t Done")
+		
 		self._session_key = session_key
 		pass
 	
 	def __send_login_request(self, username: str, password: str) -> str:
+		print("[Session]\t Login ... ")
+
 		payload = {"username":username, "password":password, "logintoken":self._login_token}
 		responde_text = self.post(self._url("login/index.php"), data=payload).text
 

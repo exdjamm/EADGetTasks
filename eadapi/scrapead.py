@@ -14,6 +14,8 @@ class ScrapEad(SessionEad):
 		self.__filter_courses = filter_courses
 		self.__filter_tasks = filter_tasks
 
+		print("\n[Scrap]\t Starts ...")
+
 		# init data courses
 		self.__set_courses_data()
 
@@ -43,6 +45,8 @@ class ScrapEad(SessionEad):
 		payload = {"sesskey" : self._session_key}
 		response_text = self.get(url, params=payload).text
 
+		print("[Scrap]\t Get courses ...")
+
 		# Pega todas as tags html <a> com o filtro passado
 		a_tags = self._filter_data(response_text, tag='a', filter={"class":"courselist_course scrollable"}, all=True)
 
@@ -58,9 +62,13 @@ class ScrapEad(SessionEad):
 
 			# Verifica se o nome do curso passa no filtro passado.
 			if any(test):
+				print(f"[Scrap]\t Get course: {clear_name(course_name)} ")
+
 				data = {"course_name": f"{clear_name(course_name)}", "link": f"{link}", 'course_id':f'{course_id}'}
 				self.__courses_data.append(data)
 
+
+		print("[Scrap]\t Done\n")
 
 		pass		
 
@@ -110,6 +118,7 @@ class ScrapEad(SessionEad):
 			que podem conter dados sobre as atividades.
 			Salva os dados das atividades na estrutura __courses_data e no __tasks_data
 			"""
+			print(f"[Scrap]\t Get tasks from: {course_data.get('course_name')} ...")
 
 			link = course_data.get('link')
 			response_text = self.get(link).text
@@ -127,6 +136,7 @@ class ScrapEad(SessionEad):
 
 
 				payload = {'section': section}
+				sleep(0.2)
 				response_text = self.get(link, params=payload, timeout=5).text
 				task_tags = self._filter_data(response_text, filter={"class":"instancename"}, all=True)
 
